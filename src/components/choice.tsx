@@ -1,9 +1,9 @@
-import { Choice } from "@/lib/model";
+import { Choice } from "@/domain/model";
 import { Button } from "@/components/button";
 
 type ChoiceListProps = {
     choices: Choice[];
-    onAnswer: (isCorrect: boolean) => void;
+    onAnswer: (isCorrect: boolean, userAnswer: string) => void; 
 };
 
 export const ChoiceList = ({ choices, onAnswer }: ChoiceListProps) => {
@@ -12,7 +12,7 @@ export const ChoiceList = ({ choices, onAnswer }: ChoiceListProps) => {
             {choices.map((choice) => (
                 <Button
                     key={choice.id}
-                    onClick={() => onAnswer(choice.isCorrect)}
+                    onClick={() => onAnswer(choice.isCorrect, choice.label)} // Pass userAnswer as choice.label
                 >
                     {choice.label}
                 </Button>

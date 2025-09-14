@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from 'next/link';
-import CAELogo from '../../public/CAE.png';
+// import { useQuizSuite } from '@/hooks/useQuizData'
 
 export default function Home() {
+
   return (
         <main className="flex min-h-screen items-center justify-center p-4 md:p-8 bg-blue-50">
             <div className="bg-white rounded-xl p-8 md:p-12 text-center shadow-lg max-w-sm w-full transition-all duration-300 ease-in-out">

@@ -1,28 +1,31 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { QuizData, Question } from '@/lib/model';
+import { useState, useCallback } from 'react';
+import { QuizSuite } from '@/domain/model';
 import { QuestionCard } from '@/components/question';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { getQuizData } from '@/hooks/useQuiz'
+import type { FlowKind } from '@/domain/model'
 
 interface QuizClientPageProps {
-    quizData: QuizData;
+    quizSuite: QuizSuite;
 }
 
-const QuizClientPage = ({ quizData }: QuizClientPageProps) => {
+const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
     const router = useRouter();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [questions, setQuestions] = useState<Question[]>([]);
     const [results, setResults] = useState<{ questionId: string; correct: boolean }[]>([]);
 
-    useEffect(() => {
-        const shuffledQuestions = [...quizData.questions].sort(() => 0.5 - Math.random());
-        setQuestions(shuffledQuestions);
-    }, [quizData]);
+    const params = useParams<{ flow: FlowKind }>()
+    const flow = (params.flow === 'rounds' ? 'rounds' : 'linear') as FlowKind
+    // const { data, isLoading, error } = useQuizSuite()
+    console.log('data:', quizSuite);
+    const quizData = getQuizData(quizSuite, flow)
+    console.log('quizData:', quizData);
 
     const handleAnswer = useCallback((isCorrect: boolean) => {
-        const currentQuestion = questions[currentQuestionIndex];
+        const currentQuestion = quizData.questions[currentQuestionIndex];
         const newResults = [...results, { questionId: currentQuestion.id, correct: isCorrect }];
         setResults(newResults);
 
@@ -30,22 +33,22 @@ const QuizClientPage = ({ quizData }: QuizClientPageProps) => {
             setScore((prevScore) => prevScore + 1);
         }
 
-        if (currentQuestionIndex < questions.length - 1) {
+        if (currentQuestionIndex < quizData.questions.length - 1) {
             setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         } else {
-            router.push(`/quiz/score?score=${score + (isCorrect ? 1 : 0)}&results=${JSON.stringify(newResults)}`);
+            router.push(`/score?score=${score + (isCorrect ? 1 : 0)}&results=${JSON.stringify(newResults)}`);
         }
-    }, [currentQuestionIndex, questions, results, router, score]);
+    }, [currentQuestionIndex, quizData.questions, results, router, score]);
 
-    if (questions.length === 0) {
+    if (quizData.questions.length === 0) {
         return <div className="flex justify-center items-center h-screen bg-blue-50 text-blue-500">Loading quiz...</div>;
     }
 
-    const currentQuestion = questions[currentQuestionIndex];
+    const currentQuestion = quizData.questions[currentQuestionIndex];
     const currentRound = quizData.rounds?.find(round => round.questionIds.includes(currentQuestion.id));
 
     return (
-        <QuestionCard question={currentQuestion} currentRound={currentRound} onAnswer={handleAnswer} totalQuestions={questions.length} currentQuestionIndex={currentQuestionIndex} />
+        <QuestionCard question={currentQuestion} currentRound={currentRound} onAnswer={handleAnswer} totalQuestions={quizData.questions.length} currentQuestionIndex={currentQuestionIndex} />
     );
 };
 

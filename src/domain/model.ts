@@ -2,10 +2,12 @@ export type Choice = { id: string; label: string; isCorrect: boolean };
 export type Question = {
   id: string;
   text: string;
-  choices: Choice[];
-  // metadata for UI
   round?: number;
   category?: string;
+  userAnswer?: string;
+  choices: Choice[];
+  isCorrect: boolean;
+  order: number;
 };
 
 export type FlowKind = 'linear' | 'rounds';
@@ -13,5 +15,16 @@ export type Round = { id: string; title?: string; questionIds: string[] };
 
 export interface QuizData {
   questions: Question[];
-  rounds?: Round[]; // present for the "rounds" flow
+  rounds?: Round[];
+}
+
+export interface Activity {
+  quizData: QuizData;
+  name: string;
+  order: number;
+  flowKind: FlowKind;
+}
+
+export interface QuizSuite {
+  activities: Activity[];
 }

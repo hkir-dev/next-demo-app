@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { QuizData, Question } from '@/lib/model';
+import { QuizData, Question } from '@/domain/model';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
