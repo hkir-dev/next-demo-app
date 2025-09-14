@@ -1,6 +1,8 @@
 import type { Question, Round, QuizSuite, Activity } from '@/domain/model'
 
+/* eslint-disable */
 type AnyRec = Record<string, any>
+/* eslint-enable */
 
 function toQuestion(raw: AnyRec, fallbackId: string, activityName: string, round?: number): Question {
   const id = (raw.id ?? fallbackId) + ''
