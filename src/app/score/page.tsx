@@ -51,7 +51,7 @@ const ScorePage = () => {
                 <div className="text-blue-700 text-3xl font-bold mb-4">
                     Results
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                     {rounds?.map((round, index) => (
                         <div key={index}>
                             {rounds.length > 1 && (
