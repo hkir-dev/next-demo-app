@@ -15,18 +15,17 @@ const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
     const router = useRouter();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [results, setResults] = useState<{ questionId: string; correct: boolean }[]>([]);
+    const [results, setResults] = useState<{ questionId: string; order: number; correct: boolean; round: number | undefined }[]>([]);
 
     const params = useParams<{ flow: FlowKind }>()
     const flow = (params.flow === 'rounds' ? 'rounds' : 'linear') as FlowKind
-    // const { data, isLoading, error } = useQuizSuite()
     console.log('data:', quizSuite);
     const quizData = getQuizData(quizSuite, flow)
     console.log('quizData:', quizData);
 
     const handleAnswer = useCallback((isCorrect: boolean) => {
         const currentQuestion = quizData.questions[currentQuestionIndex];
-        const newResults = [...results, { questionId: currentQuestion.id, correct: isCorrect }];
+        const newResults = [...results, { questionId: currentQuestion.id, order: currentQuestion.order, correct: isCorrect, round: currentQuestion.round ? currentQuestion.round : undefined }];
         setResults(newResults);
 
         if (isCorrect) {
@@ -36,7 +35,8 @@ const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
         if (currentQuestionIndex < quizData.questions.length - 1) {
             setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         } else {
-            router.push(`/score?score=${score + (isCorrect ? 1 : 0)}&results=${JSON.stringify(newResults)}`);
+            const activity = quizSuite.activities.find(a => a.flowKind === flow)
+            router.push(`/score?activity=${activity?.name}&results=${JSON.stringify(newResults)}`);
         }
     }, [currentQuestionIndex, quizData.questions, results, router, score]);
 

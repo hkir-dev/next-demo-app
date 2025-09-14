@@ -1,6 +1,6 @@
 'use client'
 import type { FlowKind, Question, QuizSuite } from '@/domain/model'
-import { getStrategy, type QuizState } from '@/hooks/flow-strategies'
+import { getStrategy, type QuizState } from '@/engine/flow-strategies'
 import { useCallback, useMemo, useState } from 'react'
 
 export function getQuizData(suiteData: QuizSuite | undefined, kind: FlowKind) {
