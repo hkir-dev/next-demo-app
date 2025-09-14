@@ -14,7 +14,6 @@ interface QuizClientPageProps {
 const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
     const router = useRouter();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [score, setScore] = useState(0);
     const [results, setResults] = useState<{ questionId: string; order: number; correct: boolean; round: number | undefined }[]>([]);
 
     const params = useParams<{ flow: FlowKind }>()
@@ -28,17 +27,14 @@ const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
         const newResults = [...results, { questionId: currentQuestion.id, order: currentQuestion.order, correct: isCorrect, round: currentQuestion.round ? currentQuestion.round : undefined }];
         setResults(newResults);
 
-        if (isCorrect) {
-            setScore((prevScore) => prevScore + 1);
-        }
-
         if (currentQuestionIndex < quizData.questions.length - 1) {
             setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
         } else {
-            const activity = quizSuite.activities.find(a => a.flowKind === flow)
-            router.push(`/score?activity=${activity?.name}&results=${JSON.stringify(newResults)}`);
+            const activity = quizSuite.activities.find(a => a.flowKind === flow);
+            sessionStorage.setItem('quizResults', JSON.stringify({ activity: activity?.name, results: newResults }));
+            router.push(`/score`);
         }
-    }, [currentQuestionIndex, quizData.questions, results, router, score]);
+    }, [currentQuestionIndex, quizData.questions, results, router, flow, quizSuite.activities]);
 
     if (quizData.questions.length === 0) {
         return <div className="flex justify-center items-center h-screen bg-blue-50 text-blue-500">Loading quiz...</div>;

@@ -1,31 +1,25 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { Question } from '@/domain/model';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const ScorePage = () => {
-    const searchParams = useSearchParams();
     const [activityName, setActivityName] = useState('');
     const [results, setResults] = useState<{ questionId: string; order: number; correct: boolean; round: number | undefined }[]>([]);
 
     useEffect(() => {
-        const activityParam = searchParams.get('activity');
-        const resultsParam = searchParams.get('results');
+        const storedData = sessionStorage.getItem('quizResults');
 
-        if (activityParam) {
-            setActivityName(activityParam);
-        }
-
-        if (resultsParam) {
+        if (storedData) {
             try {
-                setResults(JSON.parse(resultsParam));
+                const parsedData = JSON.parse(storedData);
+                setActivityName(parsedData.activity || '');
+                setResults(parsedData.results || []);
             } catch (error) {
-                console.error('Failed to parse results from URL:', error);
+                console.error('Failed to parse data from sessionStorage:', error);
             }
         }
-    }, [searchParams]);
+    }, []);
 
     console.log('Score results:', results);
 
