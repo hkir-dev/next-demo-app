@@ -4,6 +4,8 @@ Next.js based web application that implements a demo quiz application.
 
 Live: https://hkir-dev.github.io/next-demo-app/
 
+> ⚠️ Warning: First load may be slow (cold CDN cache); subsequent visits are fast.
+
 ## Developer Guide
 
 See [developer guide](/docs/development.md) for the details
