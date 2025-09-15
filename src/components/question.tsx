@@ -7,11 +7,9 @@ type QuestionCardProps = {
     question: Question;
     currentRound?: { id: string; title?: string };
     onAnswer: (isCorrect: boolean) => void;
-    totalQuestions: number;
-    currentQuestionIndex: number;
 };
 
-export const QuestionCard = ({ question, currentRound, onAnswer, totalQuestions, currentQuestionIndex }: QuestionCardProps) => {
+export const QuestionCard = ({ question, currentRound, onAnswer }: QuestionCardProps) => {
     const formatText = (text: string) => {
         const parts = text.split(/(\*.*?\*)/g);
         return parts.map((part, index) => {

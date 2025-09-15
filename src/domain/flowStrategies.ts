@@ -9,7 +9,6 @@ import { QuestionCard } from '@/components/question';
 
 export interface FlowStrategy {
     handleAnswer(params: {
-        isCorrect: boolean;
         currentQuestionIndex: number;
         quizData: { questions: Question[]; rounds?: Round[] };
         results: { questionId: string; order: number; correct: boolean; round?: number }[];
@@ -26,7 +25,6 @@ export interface FlowStrategy {
     renderRoundCard(params: {
         activityName: string;
         currentRound: Round;
-        onAnswer: (isCorrect: boolean) => void;
     }): React.ReactElement;
 
     renderQuestionCard(params: {
@@ -40,7 +38,6 @@ export interface FlowStrategy {
 
 export class LinearFlowStrategy implements FlowStrategy {
     handleAnswer({
-        isCorrect,
         currentQuestionIndex,
         quizData,
         results,
@@ -48,7 +45,6 @@ export class LinearFlowStrategy implements FlowStrategy {
         router,
         quizSuite,
     }: {
-        isCorrect: boolean;
         currentQuestionIndex: number;
         quizData: { questions: Question[]; rounds?: Round[] };
         results: { questionId: string; order: number; correct: boolean; round?: number }[];
@@ -76,29 +72,22 @@ export class LinearFlowStrategy implements FlowStrategy {
     renderQuestionCard({
         question,
         currentRound,
-        onAnswer,
-        totalQuestions,
-        currentQuestionIndex,
+        onAnswer
     }: {
         question: Question;
         currentRound: Round | undefined;
         onAnswer: (isCorrect: boolean) => void;
-        totalQuestions: number;
-        currentQuestionIndex: number;
     }): React.ReactElement {
         return React.createElement(QuestionCard, {
             question,
             currentRound,
-            onAnswer,
-            totalQuestions,
-            currentQuestionIndex,
+            onAnswer
         });
     }
 }
 
 export class RoundsFlowStrategy implements FlowStrategy {
     handleAnswer({
-        isCorrect,
         currentQuestionIndex,
         quizData,
         results,
@@ -106,7 +95,6 @@ export class RoundsFlowStrategy implements FlowStrategy {
         router,
         quizSuite,
     }: {
-        isCorrect: boolean;
         currentQuestionIndex: number;
         quizData: { questions: Question[]; rounds?: Round[] };
         results: { questionId: string; order: number; correct: boolean; round?: number }[];
@@ -141,37 +129,29 @@ export class RoundsFlowStrategy implements FlowStrategy {
         }
     }
 
-    renderRoundCard({ activityName, currentRound, onAnswer }: {
+    renderRoundCard({ activityName, currentRound }: {
         activityName: string;
         currentRound: Round;
-        onAnswer: (isCorrect: boolean) => void;
     }): React.ReactElement {
         return React.createElement(RoundCard, {
             activityName,
-            currentRound: { ...currentRound, title: currentRound?.title || 'Untitled Round' },
-            onAnswer,
+            currentRound: { ...currentRound, title: currentRound?.title || 'Untitled Round' }
         });
     }
 
     renderQuestionCard({
         question,
         currentRound,
-        onAnswer,
-        totalQuestions,
-        currentQuestionIndex,
+        onAnswer
     }: {
         question: Question;
         currentRound: Round | undefined;
         onAnswer: (isCorrect: boolean) => void;
-        totalQuestions: number;
-        currentQuestionIndex: number;
     }): React.ReactElement {
         return React.createElement(QuestionCard, {
             question,
             currentRound,
-            onAnswer,
-            totalQuestions,
-            currentQuestionIndex,
+            onAnswer
         });
     }
 }

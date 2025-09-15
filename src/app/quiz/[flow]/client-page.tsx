@@ -25,7 +25,6 @@ const QuizClientPage = ({ quizSuite }: { quizSuite: QuizSuite }) => {
         setResults(newResults);
 
         flowStrategy.handleAnswer({
-            isCorrect,
             currentQuestionIndex,
             quizData,
             results: newResults,
@@ -50,17 +49,14 @@ const QuizClientPage = ({ quizSuite }: { quizSuite: QuizSuite }) => {
     if (showRound && currentRound) {
         return flowStrategy.renderRoundCard({
             activityName: activity?.name || 'Unknown Activity',
-            currentRound,
-            onAnswer: handleAnswer,
+            currentRound
         });
     }
 
     return flowStrategy.renderQuestionCard({
         question: currentQuestion,
         currentRound,
-        onAnswer: handleAnswer,
-        totalQuestions: quizData.questions.length,
-        currentQuestionIndex,
+        onAnswer: handleAnswer
     });
 };
 
