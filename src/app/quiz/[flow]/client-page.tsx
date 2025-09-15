@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { QuizSuite } from '@/domain/model';
 import { QuestionCard } from '@/components/question';
 import { useParams, useRouter } from 'next/navigation';
 import { getQuizData } from '@/hooks/useQuiz'
 import type { FlowKind } from '@/domain/model'
+import { RoundCard } from '@/components/round';
 
 interface QuizClientPageProps {
     quizSuite: QuizSuite;
@@ -15,12 +16,11 @@ const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
     const router = useRouter();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [results, setResults] = useState<{ questionId: string; order: number; correct: boolean; round: number | undefined }[]>([]);
+    const [showRound, setShowRound] = useState(false);
 
     const params = useParams<{ flow: FlowKind }>()
     const flow = (params.flow === 'rounds' ? 'rounds' : 'linear') as FlowKind
-    console.log('data:', quizSuite);
     const quizData = getQuizData(quizSuite, flow)
-    console.log('quizData:', quizData);
 
     const handleAnswer = useCallback((isCorrect: boolean) => {
         const currentQuestion = quizData.questions[currentQuestionIndex];
@@ -36,15 +36,34 @@ const QuizClientPage = ({ quizSuite }: QuizClientPageProps) => {
         }
     }, [currentQuestionIndex, quizData.questions, results, router, flow, quizSuite.activities]);
 
-    if (quizData.questions.length === 0) {
-        return <div className="flex justify-center items-center h-screen bg-blue-50 text-blue-500">Loading quiz...</div>;
-    }
-
     const currentQuestion = quizData.questions[currentQuestionIndex];
     const currentRound = quizData.rounds?.find(round => round.questionIds.includes(currentQuestion.id));
 
+    useEffect(() => {
+        if (currentRound) {
+            setShowRound(true);
+            const timer = setTimeout(() => {
+                setShowRound(false);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [currentRound]);
+
+    const activity = quizSuite.activities.find(a => a.flowKind === flow);
+
+    if (showRound && currentRound) {
+        return <RoundCard activityName={activity?.name || 'Unknown Activity'} currentRound={{ ...currentRound, title: currentRound.title || 'Untitled Round' }} onAnswer={handleAnswer} />;
+    }
+
     return (
-        <QuestionCard question={currentQuestion} currentRound={currentRound} onAnswer={handleAnswer} totalQuestions={quizData.questions.length} currentQuestionIndex={currentQuestionIndex} />
+        <QuestionCard 
+            question={currentQuestion} 
+            currentRound={currentRound} 
+            onAnswer={handleAnswer} 
+            totalQuestions={quizData.questions.length} 
+            currentQuestionIndex={currentQuestionIndex} 
+        />
     );
 };
 

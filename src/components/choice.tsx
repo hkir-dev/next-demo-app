@@ -12,7 +12,7 @@ export const ChoiceList = ({ choices, onAnswer }: ChoiceListProps) => {
             {choices.map((choice) => (
                 <Button
                     key={choice.id}
-                    onClick={() => onAnswer(choice.isCorrect, choice.label)} // Pass userAnswer as choice.label
+                    onClick={() => onAnswer(choice.isCorrect, choice.label)}
                 >
                     {choice.label}
                 </Button>
