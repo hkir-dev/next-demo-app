@@ -1,10 +1,16 @@
+# Next.js Quiz Demo (TypeScript)
+
 Next.js based web application that implements a demo quiz application.
 
 ## Live Demo 
 
-Live: https://hkir-dev.github.io/next-demo-app/
+**Live:** https://hkir-dev.github.io/next-demo-app/
 
 > ⚠️ Warning: First load may be slow (cold CDN cache); subsequent visits are fast.
+
+## Tech Stack
+
+- Next.js (App Router), TypeScript, Tailwind, Jest, GitHub Actions.
 
 ## Developer Guide
 
@@ -20,6 +26,7 @@ src/
   hooks/           # client side data processing
   services/        # server side API access and normalisation
 ```
+
 ### Reusable components
 
 Components such as Button, CardLayout, QuestionCard and RoundCard are designed to be reused across the application (see [components folder](/src/components/)).
@@ -44,19 +51,23 @@ This makes Question UI & Score UI agnostic of flow logic and highly reusable.
 
 ### Adapter
 
-[Data adapter](/src/services/apiToQuiz.ts) provides abstraction between the data model and the data source (API.) 
+The [data adapter](/src/services/apiToQuiz.ts) decouples the app’s domain model from the remote API shape (normalizes fields, correct answer formats, and grouping).
 
 ## Testing
 
-[Unit tests](/test/services/) added for the data access and normalisation functionalities using Jest.
+[Jest unit tests](/test/services/) cover data access and normalization.
 
 ## Code Quality and Formatting
 
-This project uses **ESLint** for linting and **Prettier** for code formatting to ensure consistent styling and adherence to best practices. Run `npm run lint` to check for linting issues and `npm run format` to format the code.
+ESLint + Prettier for consistent style:
+
+```bash
+npm run lint
+npm run format
+```
 
 ## Deployment
 
-GitHub Pages: [https://hkir-dev.github.io/next-demo-app/](https://hkir-dev.github.io/next-demo-app/)
-
-The site is deployed to **GitHub Pages** via **GitHub Actions**.
-Workflow file: `.github/workflows/nextjs.yml`
+Deployed to **GitHub Pages** via **GitHub Actions**.
+Live: [https://hkir-dev.github.io/next-demo-app/](https://hkir-dev.github.io/next-demo-app/)
+Workflow: `.github/workflows/nextjs.yml`
