@@ -14,6 +14,8 @@ export const QuestionCard = ({
   currentRound,
   onAnswer,
 }: QuestionCardProps) => {
+
+  // Simple markdown-like formatting: *text* -> bold
   const formatText = (text: string) => {
     const parts = text.split(/(\*.*?\*)/g)
     return parts.map((part, index) => {

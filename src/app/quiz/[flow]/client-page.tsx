@@ -24,6 +24,7 @@ const QuizClientPage = ({ quizSuite }: { quizSuite: QuizSuite }) => {
   const flow = (params.flow === 'rounds' ? 'rounds' : 'linear') as FlowKind
   const quizData = getQuizData(quizSuite, flow)
 
+  // decide flow strategy based on the flow kind
   const flowStrategy = useMemo(
     () =>
       flow === 'rounds' ? new RoundsFlowStrategy() : new LinearFlowStrategy(),
@@ -61,6 +62,7 @@ const QuizClientPage = ({ quizSuite }: { quizSuite: QuizSuite }) => {
     round.questionIds.includes(currentQuestion.id),
   )
 
+  // Handle round display logic if applicable
   useEffect(() => {
     flowStrategy.handleRoundDisplay({
       currentRound,

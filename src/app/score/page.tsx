@@ -14,6 +14,7 @@ const ScorePage = () => {
     }[]
   >([])
 
+  // Load results from HTML5 sessionStorage
   useEffect(() => {
     const storedData = sessionStorage.getItem('quizResults')
 
@@ -28,8 +29,7 @@ const ScorePage = () => {
     }
   }, [])
 
-  console.log('Score results:', results)
-
+  // Reduces results into rounds, grouping by round number (undefined for linear)
   type Round = { order: number; correct: boolean }[][]
   const rounds = results.reduce<Round>((acc, { round, order, correct }) => {
     if (round === undefined || round === null) {
@@ -45,8 +45,6 @@ const ScorePage = () => {
     }
     return acc
   }, [])
-
-  console.log(rounds)
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 md:p-8 bg-blue-50">

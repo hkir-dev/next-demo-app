@@ -1,3 +1,5 @@
+// This is a server component that fetches quiz data and renders the client component
+
 import QuizClientPage from '@/app/quiz/[flow]/client-page'
 import { getQuizSuite } from '@/services/getQuizData'
 
